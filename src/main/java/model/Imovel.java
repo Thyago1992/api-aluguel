@@ -1,7 +1,10 @@
-package models;
+package model;
 
+import dto.ImovelDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.BeanUtils;
+
 import java.util.Objects;
 
 @Entity
@@ -16,15 +19,14 @@ public class Imovel {
     @Column(nullable = false)
     private String descricao;
 
-    @Column
+    @Column(unique = true)
     private String endereco;
 
-    // Construtores
-    public Imovel() {}
+    public Imovel(ImovelDTO imovelDTO) {
+        BeanUtils.copyProperties(imovelDTO, this);
+    }
 
-    public Imovel(String descricao, String endereco) {
-        this.descricao = descricao;
-        this.endereco = endereco;
+    public Imovel() {
     }
 
     // Getters e Setters

@@ -1,13 +1,12 @@
-package models;
+package model;
 
+import dto.AluguelDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,14 +37,8 @@ public class Aluguel {
     @Column(nullable = false)
     private Boolean pago = false;
 
-    public Aluguel(Long id, Imovel imovel, Inquilino inquilino, Double valor, LocalDate dataVencimento,
-                   Boolean pago) {
-        this.id = id;
-        this.imovel = imovel;
-        this.inquilino = inquilino;
-        this.valor = valor;
-        this.dataVencimento = dataVencimento;
-        this.pago = pago;
+    public Aluguel(AluguelDTO aluguelDTO) {
+        BeanUtils.copyProperties(aluguelDTO, this);
     }
 
     public Aluguel() {

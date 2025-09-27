@@ -1,7 +1,10 @@
-package models;
+package model;
 
+import dto.InquilinoDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.BeanUtils;
+
 import java.util.Objects;
 
 @Entity
@@ -16,15 +19,14 @@ public class Inquilino {
     @Column(nullable = false)
     private String nome;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
-    // Construtores
-    public Inquilino() {}
+    public Inquilino(InquilinoDTO inquilinoDTO) {
+        BeanUtils.copyProperties(inquilinoDTO, this);
+    }
 
-    public Inquilino(String nome, String email) {
-        this.nome = nome;
-        this.email = email;
+    public Inquilino() {
     }
 
     // Getters e Setters
