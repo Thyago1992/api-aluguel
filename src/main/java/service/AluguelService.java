@@ -34,18 +34,6 @@ public class AluguelService {
                 .collect(Collectors.toList());
     }
 
-    public boolean marcarComoPago(Long aluguelId) {
-        Optional<Aluguel> aluguelOpt = aluguelRepository.findById(aluguelId);
-
-        if (aluguelOpt.isPresent()) {
-            Aluguel aluguel = aluguelOpt.get();
-            aluguel.setPago(true);
-            aluguelRepository.save(aluguel); // Já existe!
-            return true;
-        }
-        return false;
-    }
-
     public boolean marcarComoPago(AluguelDTO aluguelDTO) {
         // Pega o ID do DTO
         Long aluguelId = aluguelDTO.getId();
