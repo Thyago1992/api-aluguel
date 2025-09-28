@@ -1,10 +1,8 @@
-package model;
+package br.com.fuctura.gestaoalugueis.model;
 
-import dto.AluguelDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -36,10 +34,6 @@ public class Aluguel {
 
     @Column(nullable = false)
     private Boolean pago = false;
-
-    public Aluguel(AluguelDTO aluguelDTO) {
-        BeanUtils.copyProperties(aluguelDTO, this);
-    }
 
     public Aluguel() {
     }

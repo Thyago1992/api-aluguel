@@ -1,9 +1,7 @@
-package dto;
+package br.com.fuctura.gestaoalugueis.dto;
 
-import model.Aluguel;
-import model.Imovel;
-import model.Inquilino;
-import org.springframework.beans.BeanUtils;
+import br.com.fuctura.gestaoalugueis.model.Imovel;
+import br.com.fuctura.gestaoalugueis.model.Inquilino;
 
 import java.time.LocalDate;
 
@@ -15,10 +13,6 @@ public class AluguelDTO {
     private Double valor;
     private LocalDate dataVencimento;
     private Boolean pago;
-
-    public AluguelDTO(Aluguel aluguel) {
-        BeanUtils.copyProperties(aluguel, this);
-    }
 
     public AluguelDTO() {
 

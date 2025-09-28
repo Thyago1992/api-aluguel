@@ -1,17 +1,10 @@
-package dto;
-
-import model.Inquilino;
-import org.springframework.beans.BeanUtils;
+package br.com.fuctura.gestaoalugueis.dto;
 
 public class InquilinoDTO {
 
     private Long id;
     private String nome;
     private String email;
-
-    public InquilinoDTO(Inquilino inquilino) {
-        BeanUtils.copyProperties(inquilino, this);
-    }
 
     public InquilinoDTO() {
     }

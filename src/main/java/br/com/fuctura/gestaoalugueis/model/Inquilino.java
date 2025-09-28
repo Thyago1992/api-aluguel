@@ -1,9 +1,7 @@
-package model;
+package br.com.fuctura.gestaoalugueis.model;
 
-import dto.InquilinoDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Objects;
 
@@ -21,10 +19,6 @@ public class Inquilino {
 
     @Column(unique = true)
     private String email;
-
-    public Inquilino(InquilinoDTO inquilinoDTO) {
-        BeanUtils.copyProperties(inquilinoDTO, this);
-    }
 
     public Inquilino() {
     }

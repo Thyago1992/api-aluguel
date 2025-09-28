@@ -1,17 +1,10 @@
-package dto;
-
-import model.Imovel;
-import org.springframework.beans.BeanUtils;
+package br.com.fuctura.gestaoalugueis.dto;
 
 public class ImovelDTO {
 
     private Long id;
     private String descricao;
     private String endereco;
-
-    public ImovelDTO(Imovel imovel) {
-        BeanUtils.copyProperties(imovel, this);
-    }
 
     public ImovelDTO() {
     }

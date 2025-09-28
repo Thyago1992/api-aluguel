@@ -1,8 +1,9 @@
-package service;
+package br.com.fuctura.gestaoalugueis.service;
 
 import br.com.fuctura.gestaoalugueis.repository.AluguelRepository;
-import dto.AluguelDTO;
-import model.Aluguel;
+import br.com.fuctura.gestaoalugueis.dto.AluguelDTO;
+import br.com.fuctura.gestaoalugueis.model.Aluguel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,31 +16,31 @@ import java.util.stream.Collectors;
 public class AluguelService {
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private AluguelRepository aluguelRepository;
 
-    public void CriarAluguel(AluguelDTO aluguelDTO) {
-        Aluguel aluguel = new Aluguel(aluguelDTO);
-        aluguelRepository.save(aluguel);
+    public AluguelDTO criarAluguel(AluguelDTO aluguelDTO) {
+        Aluguel aluguel = modelMapper.map(aluguelDTO, Aluguel.class); // ✅ ModelMapper
+        Aluguel salvo = aluguelRepository.save(aluguel);
+        return modelMapper.map(salvo, AluguelDTO.class); // ✅ ModelMapper
     }
 
     public List<AluguelDTO> listarAlugueisAtrasados() {
         LocalDate hoje = LocalDate.now();
 
-        // Busca aluguéis com vencimento < hoje e pago = false
         List<Aluguel> alugueisAtrasados = aluguelRepository
                 .findByDataVencimentoBeforeAndPagoFalse(hoje);
 
         return alugueisAtrasados.stream()
-                .map(AluguelDTO::new)
+                .map(aluguel -> modelMapper.map(aluguel, AluguelDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public boolean marcarComoPago(AluguelDTO aluguelDTO) {
-        // Pega o ID do DTO
-        Long aluguelId = aluguelDTO.getId();
-
+    public boolean marcarComoPago(Long aluguelId) {
         if (aluguelId == null) {
-            return false; // ID não fornecido
+            return false;
         }
 
         Optional<Aluguel> aluguelOpt = aluguelRepository.findById(aluguelId);
@@ -48,13 +49,9 @@ public class AluguelService {
             Aluguel aluguel = aluguelOpt.get();
             aluguel.setPago(true);
             aluguelRepository.save(aluguel);
-
-            // Atualiza o DTO também (opcional)
-            aluguelDTO.setPago(true);
-
-            return true; // Sucesso
+            return true;
         }
-        return false; // Aluguel não encontrado
+        return false;
     }
 
 }

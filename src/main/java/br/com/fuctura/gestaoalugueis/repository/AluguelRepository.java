@@ -1,6 +1,6 @@
 package br.com.fuctura.gestaoalugueis.repository;
 
-import model.Aluguel;
+import br.com.fuctura.gestaoalugueis.model.Aluguel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

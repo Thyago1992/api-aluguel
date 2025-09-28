@@ -1,9 +1,7 @@
-package model;
+package br.com.fuctura.gestaoalugueis.model;
 
-import dto.ImovelDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Objects;
 
@@ -21,10 +19,6 @@ public class Imovel {
 
     @Column(unique = true)
     private String endereco;
-
-    public Imovel(ImovelDTO imovelDTO) {
-        BeanUtils.copyProperties(imovelDTO, this);
-    }
 
     public Imovel() {
     }
