@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class Aluguel {
     @NotNull(message = "Valor é obrigatório")
     @DecimalMin(value = "0.0", message = "Valor deve ser maior ou igual a zero")
     @Column(nullable = false)
-    private Double valor;
+    private BigDecimal valor;
 
     @Column(name = "data_vencimento")
     private LocalDate dataVencimento;
@@ -75,11 +76,11 @@ public class Aluguel {
         this.inquilino = inquilino;
     }
 
-    public Double getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 

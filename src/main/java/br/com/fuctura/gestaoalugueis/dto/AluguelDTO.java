@@ -3,6 +3,7 @@ package br.com.fuctura.gestaoalugueis.dto;
 import br.com.fuctura.gestaoalugueis.model.Imovel;
 import br.com.fuctura.gestaoalugueis.model.Inquilino;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class AluguelDTO {
@@ -10,9 +11,10 @@ public class AluguelDTO {
     private Long id;
     private Imovel imovel;
     private Inquilino inquilino;
-    private Double valor;
+    private BigDecimal valor;
     private LocalDate dataVencimento;
     private Boolean pago;
+    private Integer diasEmAtraso;
 
     public AluguelDTO() {
 
@@ -42,11 +44,11 @@ public class AluguelDTO {
         this.inquilino = inquilino;
     }
 
-    public Double getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
@@ -64,5 +66,13 @@ public class AluguelDTO {
 
     public void setPago(Boolean pago) {
         this.pago = pago;
+    }
+
+    public Integer getDiasEmAtraso() {
+        return diasEmAtraso;
+    }
+
+    public void setDiasEmAtraso(Integer diasEmAtraso) {
+        this.diasEmAtraso = diasEmAtraso;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,13 +29,14 @@ public class AluguelService {
     }
 
     public List<AluguelDTO> listarAlugueisAtrasados() {
-        LocalDate hoje = LocalDate.now();
-
-        List<Aluguel> alugueisAtrasados = aluguelRepository
-                .findByDataVencimentoBeforeAndPagoFalse(hoje);
-
-        return alugueisAtrasados.stream()
-                .map(aluguel -> modelMapper.map(aluguel, AluguelDTO.class))
+        return aluguelRepository.findByPagoFalseAndInquilinoIsNotNullAndDataVencimentoIsNotNullAndDataVencimentoBefore(LocalDate.now())
+                .stream()
+                .map(aluguel -> {
+                    AluguelDTO dto = modelMapper.map(aluguel, AluguelDTO.class);
+                    int diasEmAtraso = (int) ChronoUnit.DAYS.between(aluguel.getDataVencimento(), LocalDate.now());
+                    dto.setDiasEmAtraso(diasEmAtraso);
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
