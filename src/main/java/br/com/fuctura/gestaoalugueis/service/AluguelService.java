@@ -1,7 +1,9 @@
 package br.com.fuctura.gestaoalugueis.service;
 
+import br.com.fuctura.gestaoalugueis.dto.AluguelAtrasadoDTO;
 import br.com.fuctura.gestaoalugueis.repository.AluguelRepository;
 import br.com.fuctura.gestaoalugueis.dto.AluguelDTO;
+
 import br.com.fuctura.gestaoalugueis.model.Aluguel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +30,30 @@ public class AluguelService {
         return modelMapper.map(salvo, AluguelDTO.class); // ✅ ModelMapper
     }
 
-    public List<AluguelDTO> listarAlugueisAtrasados() {
-        return aluguelRepository.findByPagoFalseAndInquilinoIsNotNullAndDataVencimentoIsNotNullAndDataVencimentoBefore(LocalDate.now())
-                .stream()
+    public List<AluguelAtrasadoDTO> listarAlugueisAtrasados() {
+        LocalDate hoje = LocalDate.now();
+
+        // 1. Busca os Aluguéis (retorna List<Aluguel>)
+        List<Aluguel> alugueisAtrasadosEntity = aluguelRepository.findByPagoFalseAndDataVencimentoLessThanEqual(hoje);
+
+        // 2. Mapeamento e Coleta
+        return alugueisAtrasadosEntity.stream()
+                // Inicia o mapeamento de Aluguel para AluguelAtrasadoDTO
                 .map(aluguel -> {
-                    AluguelDTO dto = modelMapper.map(aluguel, AluguelDTO.class);
-                    int diasEmAtraso = (int) ChronoUnit.DAYS.between(aluguel.getDataVencimento(), LocalDate.now());
-                    dto.setDiasEmAtraso(diasEmAtraso);
-                    return dto;
+                    // Cálculo dos dias em atraso
+                    long dias = ChronoUnit.DAYS.between(aluguel.getDataVencimento(), hoje);
+                    Integer diasEmAtraso = (int) dias;
+
+                    // Retorna a nova instância do DTO
+                    return new AluguelAtrasadoDTO(
+                            aluguel.getId(),
+                            aluguel.getInquilino().getNome(),
+                            aluguel.getImovel().getDescricao(),
+                            aluguel.getValor(),
+                            diasEmAtraso
+                    );
                 })
+                // 3. Coleta o resultado em uma List<AluguelAtrasadoDTO>
                 .collect(Collectors.toList());
     }
 

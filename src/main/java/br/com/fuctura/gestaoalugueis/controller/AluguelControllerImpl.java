@@ -1,6 +1,7 @@
 package br.com.fuctura.gestaoalugueis.controller;
 
 import br.com.fuctura.gestaoalugueis.controller.interfaces.AluguelController;
+import br.com.fuctura.gestaoalugueis.dto.AluguelAtrasadoDTO;
 import br.com.fuctura.gestaoalugueis.dto.AluguelDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,9 +31,11 @@ public class AluguelControllerImpl implements AluguelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(aluguelSalvo);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AluguelDTO>> listarAlugueisAtrasados() {
-        List<AluguelDTO> alugueisAtrasados = aluguelService.listarAlugueisAtrasados();
+    @Operation(description = "Lista todos os aluguéis que estão atrasados.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Lista de aluguéis atrasados retornada com sucesso.")})
+    @GetMapping("/atrasados") // <-- Adicione "/atrasados" aqui
+    public ResponseEntity<List<AluguelAtrasadoDTO>> listarAlugueisAtrasados() {
+        List<AluguelAtrasadoDTO> alugueisAtrasados = aluguelService.listarAlugueisAtrasados();
         return ResponseEntity.ok().body(alugueisAtrasados);
     }
 
