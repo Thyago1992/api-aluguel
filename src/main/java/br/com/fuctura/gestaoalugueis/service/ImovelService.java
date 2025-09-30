@@ -1,8 +1,8 @@
 package br.com.fuctura.gestaoalugueis.service;
 
-import br.com.fuctura.gestaoalugueis.repository.ImovelRepository;
 import br.com.fuctura.gestaoalugueis.dto.ImovelDTO;
 import br.com.fuctura.gestaoalugueis.model.Imovel;
+import br.com.fuctura.gestaoalugueis.repository.ImovelRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,5 +21,4 @@ public class ImovelService {
         Imovel salvo = imovelRepository.save(imovel);
         return modelMapper.map(salvo, ImovelDTO.class);
     }
-
 }

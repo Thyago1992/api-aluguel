@@ -1,4 +1,5 @@
 package br.com.fuctura.gestaoalugueis.dto;
+
 import java.math.BigDecimal;
 
 public class AluguelAtrasadoDTO {

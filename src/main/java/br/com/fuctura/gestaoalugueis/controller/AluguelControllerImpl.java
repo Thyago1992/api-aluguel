@@ -32,13 +32,17 @@ public class AluguelControllerImpl implements AluguelController {
     }
 
     @Operation(description = "Lista todos os aluguéis que estão atrasados.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Lista de aluguéis atrasados retornada com sucesso.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Lista de aluguéis atrasados " +
+            "retornada com sucesso.")})
     @GetMapping("/atrasados") // <-- Adicione "/atrasados" aqui
     public ResponseEntity<List<AluguelAtrasadoDTO>> listarAlugueisAtrasados() {
         List<AluguelAtrasadoDTO> alugueisAtrasados = aluguelService.listarAlugueisAtrasados();
         return ResponseEntity.ok().body(alugueisAtrasados);
     }
 
+    @Operation(description = "Marca um aluguel como pago.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Aluguel marcado como pago com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Aluguel não encontrado.")})
     @PutMapping("/{id}/marcar-pago")
     public ResponseEntity<String> marcarComoPago(@PathVariable Long id) {
         boolean sucesso = aluguelService.marcarComoPago(id);
@@ -49,8 +53,6 @@ public class AluguelControllerImpl implements AluguelController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 
 
 }

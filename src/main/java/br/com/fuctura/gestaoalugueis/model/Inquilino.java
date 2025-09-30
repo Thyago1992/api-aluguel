@@ -1,6 +1,7 @@
 package br.com.fuctura.gestaoalugueis.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class Inquilino {
     @Column(nullable = false)
     private String nome;
 
+    @Email(message = "Email deve ser válido")
     @Column(unique = true)
     private String email;
 
