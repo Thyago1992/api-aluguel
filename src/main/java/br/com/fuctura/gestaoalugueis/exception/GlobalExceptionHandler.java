@@ -17,6 +17,22 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Trata ResourceNotFoundException (404)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(
+            ResourceNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     // Trata DuplicateResourceException (409)
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResource(
@@ -59,7 +75,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // NOVO: Trata validações da entidade JPA (400)
+    // Trata validações da entidade JPA (400)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(
             ConstraintViolationException ex,
@@ -91,9 +107,19 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         String message = "Violação de integridade de dados";
+        String errorMessage = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
 
-        if (ex.getMessage().contains("constraint") || ex.getMessage().contains("unique")) {
+        // Detecta violação de chave estrangeira
+        if (errorMessage.contains("foreign key") || errorMessage.contains("fk_")) {
+            message = "Registro relacionado não encontrado. Verifique se o imóvel ou inquilino existe";
+        }
+        // Detecta violação de unique constraint
+        else if (errorMessage.contains("unique") || errorMessage.contains("duplicate")) {
             message = "Já existe um registro com esse valor único (ex: email duplicado)";
+        }
+        // Detecta violação de not null
+        else if (errorMessage.contains("not null") || errorMessage.contains("null value")) {
+            message = "Campo obrigatório não foi informado";
         }
 
         ErrorResponse error = new ErrorResponse(

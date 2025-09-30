@@ -15,7 +15,7 @@ public class Imovel {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(unique = true)
+    @Column
     private String endereco;
 
 }
