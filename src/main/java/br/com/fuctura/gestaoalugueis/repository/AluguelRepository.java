@@ -5,8 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface AluguelRepository extends JpaRepository<Aluguel, Long> {
     List<Aluguel> findByPagoFalseAndDataVencimentoLessThanEqual(LocalDate hoje);
+
+    boolean existsByImovelIdAndPagoFalse(Long imovelId);
+
+    Optional<Aluguel> findByImovelIdAndPagoFalse(Long imovelId);
 }
+
 

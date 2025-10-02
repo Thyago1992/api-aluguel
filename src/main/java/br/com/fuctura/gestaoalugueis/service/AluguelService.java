@@ -1,6 +1,7 @@
 package br.com.fuctura.gestaoalugueis.service;
 
 import br.com.fuctura.gestaoalugueis.dto.AluguelAtrasadoDTO;
+import br.com.fuctura.gestaoalugueis.exception.BusinessException;
 import br.com.fuctura.gestaoalugueis.exception.ResourceNotFoundException;
 import br.com.fuctura.gestaoalugueis.repository.AluguelRepository;
 import br.com.fuctura.gestaoalugueis.dto.AluguelDTO;
@@ -26,7 +27,15 @@ public class AluguelService {
     public AluguelDTO criarAluguel(AluguelDTO aluguelDTO) {
         // Valida se o imóvel foi informado
         if (aluguelDTO.getImovel() == null || aluguelDTO.getImovel().getId() == null) {
-            throw new IllegalArgumentException("Imóvel é obrigatório");
+            throw new BusinessException("Imóvel é obrigatório");
+        }
+
+        // Verifica se já existe algum aluguel ativo para o imóvel
+        boolean imovelJaAlugado = aluguelRepository
+                .existsByImovelIdAndPagoFalse(aluguelDTO.getImovel().getId());
+
+        if (imovelJaAlugado) {
+            throw new BusinessException("Este imóvel já possui um aluguel ativo");
         }
 
         Aluguel aluguel = modelMapper.map(aluguelDTO, Aluguel.class);
