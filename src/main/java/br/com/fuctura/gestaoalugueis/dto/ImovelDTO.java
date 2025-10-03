@@ -1,5 +1,6 @@
 package br.com.fuctura.gestaoalugueis.dto;
 
+import br.com.fuctura.gestaoalugueis.validation.NotBlankButNullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -10,6 +11,8 @@ public class ImovelDTO {
 
     @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
+
+    @NotBlankButNullable
     private String endereco;
 
 }
