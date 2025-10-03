@@ -25,12 +25,11 @@ public class AluguelService {
     private AluguelRepository aluguelRepository;
 
     public AluguelDTO criarAluguel(AluguelDTO aluguelDTO) {
-        // Valida se o imóvel foi informado
         if (aluguelDTO.getImovel() == null || aluguelDTO.getImovel().getId() == null) {
             throw new BusinessException("Imóvel é obrigatório");
         }
 
-        // Verifica se já existe algum aluguel ativo para o imóvel
+        // Impede que um imóvel tenha dois aluguéis ativos simultaneamente
         boolean imovelJaAlugado = aluguelRepository
                 .existsByImovelIdAndPagoFalse(aluguelDTO.getImovel().getId());
 
@@ -51,6 +50,7 @@ public class AluguelService {
 
         return alugueisAtrasadosEntity.stream()
                 .map(aluguel -> {
+                    // Calcula a diferença em dias entre o vencimento e hoje
                     long dias = ChronoUnit.DAYS.between(aluguel.getDataVencimento(), hoje);
                     Integer diasEmAtraso = (int) dias;
 
@@ -77,6 +77,10 @@ public class AluguelService {
 
         Aluguel aluguel = aluguelRepository.findById(aluguelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluguel", aluguelId));
+
+        if (aluguel.getPago()) {
+            throw new BusinessException("O aluguel ID " + aluguelId + " já está pago e não precisa ser pago novamente.");
+        }
 
         aluguel.setPago(true);
         Aluguel atualizado = aluguelRepository.save(aluguel);

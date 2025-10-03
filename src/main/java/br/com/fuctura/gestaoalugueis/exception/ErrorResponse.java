@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Classe de resposta padrão para erros da API.
+ * Suporta tanto erros simples quanto erros com detalhes de validação de campos.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +25,6 @@ public class ErrorResponse {
     private String path;
     private List<FieldError> errors;
 
-    // Construtor personalizado para erros simples (sem lista de erros)
     public ErrorResponse(int status, String error, String message, String path) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
@@ -30,7 +33,6 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    // Inner class para erros de validação
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

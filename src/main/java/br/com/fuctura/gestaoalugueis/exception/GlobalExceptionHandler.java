@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tratamento centralizado de exceções da API.
+ * Captura exceções e retorna respostas padronizadas com códigos HTTP apropriados.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Trata ResourceNotFoundException (404)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(
             ResourceNotFoundException ex,
@@ -33,7 +36,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // Trata DuplicateResourceException (409)
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResource(
             DuplicateResourceException ex,
@@ -49,7 +51,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
-    // Trata BusinessException (400)
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(
             BusinessException ex,
@@ -65,7 +66,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // Trata erros de validação (@Valid) (400)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex,
@@ -91,7 +91,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // Trata validações da entidade JPA (400)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(
             ConstraintViolationException ex,
@@ -116,7 +115,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // Trata violação de constraint do banco (409)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
             DataIntegrityViolationException ex,
@@ -125,16 +123,12 @@ public class GlobalExceptionHandler {
         String message = "Violação de integridade de dados";
         String errorMessage = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
 
-        // Detecta violação de chave estrangeira
+        // Personaliza mensagens baseado no tipo de violação
         if (errorMessage.contains("foreign key") || errorMessage.contains("fk_")) {
             message = "Registro relacionado não encontrado. Verifique se o imóvel ou inquilino existe";
-        }
-        // Detecta violação de unique constraint
-        else if (errorMessage.contains("unique") || errorMessage.contains("duplicate")) {
+        } else if (errorMessage.contains("unique") || errorMessage.contains("duplicate")) {
             message = "Já existe um registro com esse valor único (ex: email duplicado)";
-        }
-        // Detecta violação de not null
-        else if (errorMessage.contains("not null") || errorMessage.contains("null value")) {
+        } else if (errorMessage.contains("not null") || errorMessage.contains("null value")) {
             message = "Campo obrigatório não foi informado";
         }
 
@@ -148,7 +142,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
-    // Trata exceções genéricas (500)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex,

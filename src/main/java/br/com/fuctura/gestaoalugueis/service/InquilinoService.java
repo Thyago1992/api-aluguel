@@ -18,7 +18,7 @@ public class InquilinoService {
     private InquilinoRepository inquilinoRepository;
 
     public InquilinoDTO cadastrarInquilino(InquilinoDTO inquilinoDTO) {
-        // Validar se email já existe (somente se email foi fornecido)
+        // Valida duplicidade de email apenas se foi informado
         if (inquilinoDTO.getEmail() != null &&
                 !inquilinoDTO.getEmail().isBlank() &&
                 inquilinoRepository.existsByEmail(inquilinoDTO.getEmail())) {

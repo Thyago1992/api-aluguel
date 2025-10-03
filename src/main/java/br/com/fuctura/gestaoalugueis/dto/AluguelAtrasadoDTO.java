@@ -1,25 +1,24 @@
 package br.com.fuctura.gestaoalugueis.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO para representar aluguéis em atraso na listagem.
+ * Contém apenas as informações necessárias para exibição.
+ */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AluguelAtrasadoDTO {
 
     private Long id;
-    private String inquilino; // Nome do Inquilino
-    private String imovel;    // Descrição do Imóvel
+    private String inquilino;
+    private String imovel;
     private BigDecimal valor;
     private Integer diasEmAtraso;
-
-    // Construtor completo para facilitar o mapeamento no Service
-    public AluguelAtrasadoDTO(Long id, String inquilino, String imovel, BigDecimal valor, Integer diasEmAtraso) {
-        this.id = id;
-        this.inquilino = inquilino;
-        this.imovel = imovel;
-        this.valor = valor;
-        this.diasEmAtraso = diasEmAtraso;
-    }
 
 }
